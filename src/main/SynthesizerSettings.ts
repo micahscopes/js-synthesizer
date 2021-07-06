@@ -71,4 +71,7 @@ export default interface SynthesizerSettings {
 	reverbRoomSize?: number;
 	/** The stereo spread of the reverb signal (double [0-100] / default: 0.5) */
 	reverbWidth?: number;
+
+	/** Register the AudioWorkletProcessor on a zone in AudioWorkletGlobalScope.zones */
+	zone?: string;
 }

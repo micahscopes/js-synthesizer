@@ -29,11 +29,20 @@ export default function registerAudioWorkletProcessor() {
 		private synth: Synthesizer | undefined;
 		private _messaging: ReturnMessageInstance;
 
+		registerToZone(key="default") {
+			if (!AudioWorkletGlobalScope.zones) AudioWorkletGlobalScope.zones = {};
+			const zones = AudioWorkletGlobalScope.zones;
+			if (!AudioWorkletGlobalScope.zones[key]) AudioWorkletGlobalScope.zones[key] = {};
+			zones[key]['FLUIDSYNTH'] = this;
+		}
+
 		constructor(options: AudioWorkletNodeOptions) {
 			super(options);
 
 			const settings: SynthesizerSettings | undefined =
 				options.processorOptions && options.processorOptions.settings;
+
+			this.registerToZone(settings?.zone)
 
 			const promiseInitialized = this.doInit(settings);
 			this._messaging = initializeReturnPort(this.port, promiseInitialized, () => this.synth!, (data) => {
